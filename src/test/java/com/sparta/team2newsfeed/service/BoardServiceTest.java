@@ -215,39 +215,39 @@ class BoardServiceTest {
     void test11() {
         //given
         given(userDetails.getUser()).willReturn(user);
-        AddBoardRequestDto requestDto = new AddBoardRequestDto("메인테스트","내용","KOREAN",3,userDetails.getUser());
+        AddBoardRequestDto requestDto = new AddBoardRequestDto("메인테스트", "내용", "KOREAN", 3, userDetails.getUser());
         given(boardRepository.save(Mockito.any(Board.class))).willReturn(board);
         //위처럼 사용하면 특정 Board를 save하는게아닌 아무 Board나 save했다고 생각하고 board를 반환해줌
         //given(boardRepository.save(new Board(requestDto, userDetails.getUser()))).willReturn(board);
         //when
-        ResponseEntity<?> response = boardService.addBoard(userDetails,requestDto);
+        ResponseEntity<?> response = boardService.addBoard(userDetails, requestDto);
         //then
         assertEquals(200, response.getStatusCode().value());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getTitle(),requestDto.getTitle());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getBody(),requestDto.getBody());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getCategory(),requestDto.getCategory());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getUsername(),requestDto.getUser().getUsername());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getTitle(), requestDto.getTitle());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getBody(), requestDto.getBody());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getCategory(), requestDto.getCategory());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getUsername(), requestDto.getUser().getUsername());
     }
 
     @Test
     @DisplayName("게시글 수정 테스트 - 성공")
-    //실패할수있는 요인인 작성자인지 검증과, 해당게시물은 위에서 이미 테스트 완료
+        //실패할수있는 요인인 작성자인지 검증과, 해당게시물은 위에서 이미 테스트 완료
     void test12() {
         //given
         Long boardId = board.getId();
         given(userDetails.getUser()).willReturn(user);
         given(boardRepository.findById(boardId)).willReturn(Optional.of(board));
         given(boardRepository.save(board)).willReturn(board);
-        AddBoardRequestDto requestDto = new AddBoardRequestDto("변경title","변경body,","WESTREN",3,userDetails.getUser());
+        AddBoardRequestDto requestDto = new AddBoardRequestDto("변경title", "변경body,", "WESTREN", 3, userDetails.getUser());
         board.update(requestDto);
         //when
-        ResponseEntity<?> response = boardService.updateBoard(boardId,userDetails,requestDto);
+        ResponseEntity<?> response = boardService.updateBoard(boardId, userDetails, requestDto);
         //then
         assertEquals(200, response.getStatusCode().value());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getTitle(),requestDto.getTitle());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getBody(),requestDto.getBody());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getCategory(),requestDto.getCategory());
-        assertEquals(((AddBoardResponseDto)response.getBody()).getUsername(),requestDto.getUser().getUsername());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getTitle(), requestDto.getTitle());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getBody(), requestDto.getBody());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getCategory(), requestDto.getCategory());
+        assertEquals(((AddBoardResponseDto) response.getBody()).getUsername(), requestDto.getUser().getUsername());
     }
 
     @Test
@@ -257,9 +257,9 @@ class BoardServiceTest {
         Long boardId = board.getId();
         given(userDetails.getUser()).willReturn(otherUser);
         given(boardRepository.findById(boardId)).willReturn(Optional.of(board));
-        AddBoardRequestDto requestDto = new AddBoardRequestDto("변경title","변경body,","WESTREN",3,userDetails.getUser());
+        AddBoardRequestDto requestDto = new AddBoardRequestDto("변경title", "변경body,", "WESTREN", 3, userDetails.getUser());
         //when
-        ResponseEntity<?> response = boardService.updateBoard(boardId,userDetails,requestDto);
+        ResponseEntity<?> response = boardService.updateBoard(boardId, userDetails, requestDto);
         //then
         assertEquals(400, response.getStatusCode().value());
         assertEquals("작성자만 수정이 가능합니다.", ((StatusResponseDto) response.getBody()).getMsg());
@@ -271,9 +271,9 @@ class BoardServiceTest {
         //given
         given(userDetails.getUser()).willReturn(user);
         given(boardRepository.findById(Mockito.any(Long.class))).willReturn(Optional.empty());
-        AddBoardRequestDto requestDto = new AddBoardRequestDto("변경title","변경body,","WESTREN",3,userDetails.getUser());
+        AddBoardRequestDto requestDto = new AddBoardRequestDto("변경title", "변경body,", "WESTREN", 3, userDetails.getUser());
         //when
-        ResponseEntity<?> response = boardService.updateBoard(Mockito.any(Long.class),userDetails,requestDto);
+        ResponseEntity<?> response = boardService.updateBoard(Mockito.any(Long.class), userDetails, requestDto);
         //then
         assertEquals(400, response.getStatusCode().value());
         assertEquals("해당하는 게시물이 없습니다.", ((StatusResponseDto) response.getBody()).getMsg());
@@ -287,7 +287,7 @@ class BoardServiceTest {
         given(userDetails.getUser()).willReturn(user);
         given(boardRepository.findById(boardId)).willReturn(Optional.of(board));
         //when
-        ResponseEntity<?> response = boardService.deleteBoard(boardId,userDetails);
+        ResponseEntity<?> response = boardService.deleteBoard(boardId, userDetails);
         //then
         assertEquals(200, response.getStatusCode().value());
         assertEquals("게시물이 삭제 되었습니다.", ((StatusResponseDto) response.getBody()).getMsg());
@@ -301,7 +301,7 @@ class BoardServiceTest {
         given(userDetails.getUser()).willReturn(otherUser);
         given(boardRepository.findById(boardId)).willReturn(Optional.of(board));
         //when
-        ResponseEntity<?> response = boardService.deleteBoard(boardId,userDetails);
+        ResponseEntity<?> response = boardService.deleteBoard(boardId, userDetails);
         //then
         assertEquals(400, response.getStatusCode().value());
         assertEquals("작성자만 삭제가 가능합니다.", ((StatusResponseDto) response.getBody()).getMsg());
@@ -314,7 +314,7 @@ class BoardServiceTest {
         given(boardRepository.findById(Mockito.any(Long.class))).willReturn(Optional.empty());
 
         //when
-        ResponseEntity<?> response = boardService.deleteBoard(Mockito.any(Long.class),userDetails);
+        ResponseEntity<?> response = boardService.deleteBoard(Mockito.any(Long.class), userDetails);
         //then
         assertEquals(400, response.getStatusCode().value());
         assertEquals("해당하는 게시물이 없습니다.", ((StatusResponseDto) response.getBody()).getMsg());
