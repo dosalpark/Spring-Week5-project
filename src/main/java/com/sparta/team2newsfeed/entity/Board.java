@@ -56,4 +56,12 @@ public class Board extends Timestemped {
         this.category = addBoardRequestDto.getCategory();
         this.cookLevel = addBoardRequestDto.getCookLevel();
     }
+
+    public Board(String title, String body, String category, int cookLevel, User user) {
+        this.title = title;
+        this.body = body;
+        this.category = category;
+        this.cookLevel = cookLevel;
+        this.user = user;
+    }
 }
