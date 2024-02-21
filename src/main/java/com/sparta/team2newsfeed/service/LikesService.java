@@ -28,7 +28,7 @@ public class LikesService {
         if (likes != null) {
             likesRepository.delete(likes);
         } else {
-            Likes newLikes = new Likes(userDetails.getUser(), board);
+            Likes newLikes = new Likes(userDetails, board);
             likesRepository.save(newLikes);
         }
     }

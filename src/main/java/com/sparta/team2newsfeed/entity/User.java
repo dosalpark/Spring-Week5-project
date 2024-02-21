@@ -3,7 +3,6 @@ package com.sparta.team2newsfeed.entity;
 import com.sparta.team2newsfeed.dto.UserUpdateRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -46,16 +45,6 @@ public class User {
 
     //회원정보 대조용
     public User(String username, String name, String password, String email, String intro) {
-        this.username = username;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.intro = intro;
-    }
-
-    @Builder
-    public User(Long id, String username, String name, String password, String email, String intro) {
-        this.id = id;
         this.username = username;
         this.name = name;
         this.password = password;

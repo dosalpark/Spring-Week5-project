@@ -2,7 +2,6 @@ package com.sparta.team2newsfeed.entity;
 
 import com.sparta.team2newsfeed.dto.AddBoardRequestDto;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -59,16 +58,6 @@ public class Board extends Timestemped {
     }
 
     public Board(String title, String body, String category, int cookLevel, User user) {
-        this.title = title;
-        this.body = body;
-        this.category = category;
-        this.cookLevel = cookLevel;
-        this.user = user;
-    }
-
-    @Builder
-    public Board(Long id, String title, String body, String category, int cookLevel, User user) {
-        this.id = id;
         this.title = title;
         this.body = body;
         this.category = category;
