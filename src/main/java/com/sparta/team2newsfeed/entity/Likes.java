@@ -1,6 +1,5 @@
 package com.sparta.team2newsfeed.entity;
 
-import com.sparta.team2newsfeed.imp.UserDetailsImpl;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +21,8 @@ public class Likes {
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
-    public Likes(UserDetailsImpl userDetails, Board board) {
-        this.user = userDetails.getUser();
+    public Likes(User user, Board board) {
+        this.user = user;
         this.board = board;
     }
 
