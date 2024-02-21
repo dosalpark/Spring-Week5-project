@@ -21,14 +21,14 @@ public class UserDetailsService {
 
     }
 
-    public static Long getLoginUserId(){
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || authentication.getName() == null){
-            throw new IllegalArgumentException("로그인 유저 정보가 없음");
-        }
-        Long LoginId = Long.parseLong(authentication.getName());
-        return LoginId;
-    }
+//    public static Long getLoginUserId(){
+//        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        if(authentication == null || authentication.getName() == null){
+//            throw new IllegalArgumentException("로그인 유저 정보가 없음");
+//        }
+//        Long LoginId = Long.parseLong(authentication.getName());
+//        return LoginId;
+//    }
 
 
 
