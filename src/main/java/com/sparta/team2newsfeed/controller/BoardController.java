@@ -25,19 +25,19 @@ public class BoardController {
 
     //단일게시글 조회
     @GetMapping("/board/{boardId}")
-    public ResponseEntity<?> getBoardOne(@PathVariable Long boardId) {
+    public ResponseEntity<?> getBoardOne(@PathVariable("boardId") Long boardId) {
         return boardService.getBoardOne(boardId);
     }
 
     //카테고리별 조회
     @GetMapping("/board/category/{categoryName}")
-    public ResponseEntity<?> getBoardCategory(@PathVariable String categoryName) {
+    public ResponseEntity<?> getBoardCategory(@PathVariable("categoryName") String categoryName) {
         return boardService.getBoardCategory(categoryName);
     }
 
     //난이도별 조회
     @GetMapping("/board/cooklevel/{cookLevel}")
-    public ResponseEntity<?> getBoardCookLevel(@PathVariable int cookLevel) {
+    public ResponseEntity<?> getBoardCookLevel(@PathVariable("cookLevel") int cookLevel) {
         return boardService.getBoardCookLevel(cookLevel);
     }
 
@@ -50,7 +50,7 @@ public class BoardController {
 
     //게시글 수정
     @PutMapping("/boardmake/{boardId}")
-    public ResponseEntity<?> updateBoard(@PathVariable Long boardId,
+    public ResponseEntity<?> updateBoard(@PathVariable("boardId") Long boardId,
                                          @AuthenticationPrincipal UserDetailsImpl userDetails,
                                          @RequestBody AddBoardRequestDto addBoardRequestDto) {
         return boardService.updateBoard(boardId, userDetails, addBoardRequestDto);
