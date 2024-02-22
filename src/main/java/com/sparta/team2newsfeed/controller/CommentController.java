@@ -32,7 +32,7 @@ public class CommentController {
     private ResponseEntity<?> updateComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                             @RequestBody CommentRequestDto CommentRequestDto,
                                             @PathVariable Long boardId,
-                                            @PathVariable Long commentId) {
+                                            @PathVariable("commentId") Long commentId) {
         return commentService.updateComment(userDetails, CommentRequestDto, boardId, commentId);
     }
 
@@ -40,7 +40,7 @@ public class CommentController {
     @DeleteMapping("/{commentId}")
     private ResponseEntity<StatusResponseDto> deleteComment(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                             @PathVariable Long boardId,
-                                                            @PathVariable Long commentId) {
+                                                            @PathVariable("commentId") Long commentId) {
         return commentService.deleteComment(userDetails, boardId, commentId);
     }
 

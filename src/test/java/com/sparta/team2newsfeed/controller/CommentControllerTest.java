@@ -1,14 +1,11 @@
 package com.sparta.team2newsfeed.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.team2newsfeed.dto.AddBoardRequestDto;
+import com.sparta.team2newsfeed.dto.CommentRequestDto;
 import com.sparta.team2newsfeed.entity.User;
 import com.sparta.team2newsfeed.imp.UserDetailsImpl;
-import com.sparta.team2newsfeed.jwt.JwtUtil;
 import com.sparta.team2newsfeed.service.BoardService;
 import com.sparta.team2newsfeed.service.CommentService;
-import com.sparta.team2newsfeed.service.LikesService;
-import com.sparta.team2newsfeed.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,14 +30,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
-//JPA에서 제공하는 Auditing등 기능을 Mock객체로 대체
-// (새로 class생성해서  @EnableJpaAuditing 따로 빼놔도됨)
 @MockBean(JpaMetamodelMappingContext.class)
-@WebMvcTest(controllers = BoardController.class,
+@WebMvcTest(controllers = CommentController.class,
         excludeFilters = { //WebMvcConfigurer 클래스와 동일한 타입의 필터를 찾아서 제외 ≒ Security 해제
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class)})
 @ActiveProfiles("test")
-class BoardControllerTest {
+class CommentControllerTest {
     MockMvc mockMvc; //http(get,post,put,delete) 요청 생성
 
     @Autowired
@@ -50,15 +45,9 @@ class BoardControllerTest {
     ObjectMapper objectMapper; //Object <-> json 변환
 
     @MockBean
-    BoardService boardService;
-    @MockBean
     CommentService commentService;
     @MockBean
-    LikesService likesService;
-    @MockBean
-    UserService userService;
-    @MockBean
-    JwtUtil jwtUtil;
+    BoardService boardService;
 
     @BeforeEach
     void mockMVCSetup() {
@@ -73,62 +62,16 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("전체 게시글 조회 - 성공")
+    @DisplayName("코멘트 등록 - 성공")
     void test1() throws Exception {
-        mockMvc.perform(get("/api/board"))// http요청 + url
-                .andExpect(status().isOk()) //예상값
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("단일 게시글 조회 - 성공")
-    void test2() throws Exception {
         //given
-        Long boardId = 1L;
-        //when-then
-        mockMvc.perform(get("/api/board/{boardId}", boardId)) //http요청 + url
-                .andExpect(status().isOk()) //예상값
-                .andDo(print());
-    }
+        String comment = "댓글테스트";
+        CommentRequestDto requestDto = new CommentRequestDto(comment);
 
-    @Test
-    @DisplayName("카테고리별 게시글 조회 - 성공")
-    void test3() throws Exception {
-        //given
-        String category = "KOREAN";
-        //when-then
-        mockMvc.perform(get("/api/board/category/{categoryName}", category)) //http요청 + url
-                .andExpect(status().isOk()) //예상값
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("난이도별 게시글 조회 - 성공")
-    void test4() throws Exception {
-        //given
-        int cookLevel = 3;
-        //when-then
-        mockMvc.perform(get("/api/board/cooklevel/{cookLevel}", cookLevel)) //http요청 + url
-                .andExpect(status().isOk()) //예상값
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("게시글 작성 - 성공")
-    void test5() throws Exception {
-        //given
-//        mockUserSetup();
-        AddBoardRequestDto requestDto = new AddBoardRequestDto(
-                "요리제목",
-                "요리내용",
-                "KOREAN",
-                5,
-                new User()
-        );
         String postInfo = objectMapper.writeValueAsString(requestDto);
 
         //when-then
-        mockMvc.perform(post("/api/boardmake")
+        mockMvc.perform(post("/api/board/1/comment")
                         .content(postInfo)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -137,37 +80,33 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("게시글 수정 - 성공")
-    void test6() throws Exception {
+    @DisplayName("코멘트 수정 - 성공")
+    void test2() throws Exception {
         //given
-        Long boardId = 1L;
-        AddBoardRequestDto requestDto = new AddBoardRequestDto(
-                "요리제목",
-                "요리내용",
-                "WESTERN",
-                3,
-                new User()
-        );
+        Long commentId = 1L;
+        String comment = "댓글 수정테스트";
+        CommentRequestDto requestDto = new CommentRequestDto(comment);
+
         String postInfo = objectMapper.writeValueAsString(requestDto);
 
         //when-then
-        mockMvc.perform(put("/api/boardmake/{boardId}", boardId)
+        mockMvc.perform(put("/api/board/1/comment/{commentId}", commentId)
                         .content(postInfo)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()) //예상값
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("게시글 삭제 - 성공")
-    void test7() throws Exception {
+    @DisplayName("코멘트 삭제 - 성공")
+    void test3() throws Exception {
         //given
-        Long boardId = 1L;
+        Long commentId = 1L;
 
         //when-then
-        mockMvc.perform(delete("/api/boardmake/{boardId}", boardId))
-                .andExpect(status().isOk()) //예상값
+        mockMvc.perform(delete("/api/board/1/comment/{commentId}", commentId))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }
